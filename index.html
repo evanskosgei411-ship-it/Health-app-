@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Connect App</title>
+</head>
+<body>
+
+<h2>Register</h2>
+<input id="name" placeholder="Name">
+<input id="email" placeholder="Email">
+<button onclick="register()">Register</button>
+
+<h2>Symptom Checker</h2>
+<input id="symptom" placeholder="Enter symptom">
+<button onclick="checkSymptom()">Check</button>
+<p id="result"></p>
+
+<h2>Book Appointment</h2>
+<input id="patient" placeholder="Patient Name">
+<input id="date" placeholder="Date">
+<button onclick="book()">Book</button>
+
+<script>
+async function register() {
+    await fetch("http://127.0.0.1:5000/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value
+        })
+    });
+    alert("Registered!");
+}
+
+async function checkSymptom() {
+    const res = await fetch("http://127.0.0.1:5000/symptom-check", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            symptom: document.getElementById("symptom").value
+        })
+    });
+    const data = await res.json();
+    document.getElementById("result").innerText = data.advice;
+}
+
+async function book() {
+    await fetch("http://127.0.0.1:5000/appointment", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            patient: document.getElementById("patient").value,
+            date: document.getElementById("date").value
+        })
+    });
+    alert("Appointment Booked!");
+}
+</script>
+
+</body>
+</html>
